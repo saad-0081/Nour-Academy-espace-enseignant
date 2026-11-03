@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nour Academy — Espace enseignant</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="entete">
+        <h1>Nour Academy</h1>
+        <p>Espace enseignant</p>
+    </header>
+    <main>
+        <div class="barre">
+            <h2>Mes élèves</h2>
+            <p id="compteur" aria-live="polite"></p>
+        </div>
+        <section class="filtres">
+            <div class="champ">
+                <label for="groupe">Choisir un groupe</label>
+                <select id="groupe">
+                </select>
+            </div>
+            <div class="champ">
+                <label for="recherche">Rechercher un élève</label>
+                <input
+                    type="search"
+                    id="recherche"
+                    placeholder="Nom ou prénom..."
+                >
+            </div>
+        </section>
+        <p id="vide" class="vide" hidden>
+            Aucun élève trouvé.
+        </p> 
+        <ul id="liste" class="liste"></ul>
+    </main>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nour Academy — Espace enseignant</title>
+  <link rel="stylesheet" href="css/style.css">
+  </head>
+<body>
+  <header class="entete">
+    <h1>Nour Academy</h1>
+    <p>Espace enseignant</p>
+  </header>
+
+  <main>
+    <div class="barre">
+      <h2>Mes élèves</h2>
+      <p id="compteur" aria-live="polite"></p>
+    </div>
+    <ul id="liste" class="liste"></ul>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

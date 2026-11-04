@@ -5,8 +5,14 @@
     --discret: #5f6c7b;
     --bordure: #dde2e8;
     --principal: #1d5fa8;
+    --sur-principal: #ffffff;
     --alerte: #b42318;
     --alerte-fond: #fdecea;
+    --badge-fond: #fee2e2;
+    --badge-texte: #b91c1c;
+    --focus: #f0b429;
+    --rayon: 8px;
+    --tactile: 44px;
 }
 
 * {
@@ -23,7 +29,7 @@ body {
 
 .entete {
     background: var(--principal);
-    color: #fff;
+    color: var(--sur-principal);
     padding: 1rem;
 }
 
@@ -46,8 +52,10 @@ main {
 
 .barre {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: baseline;
+    gap: .25rem 1rem;
     margin-bottom: .75rem;
 }
 
@@ -59,71 +67,6 @@ main {
 .barre p {
     margin: 0;
     color: var(--discret);
-}
-
-.liste {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: .5rem;
-}
-
-.ligne {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: .25rem .75rem;
-    align-items: center;
-    background: var(--carte);
-    border: 1px solid var(--bordure);
-    border-radius: 8px;
-    padding: .75rem;
-}
-
-.ligne.alerte {
-    border-color: var(--alerte);
-    background: var(--alerte-fond);
-}
-
-.nom {
-    font-weight: 600;
-}
-
-.infos {
-    grid-column: 1;
-    display: flex;
-    gap: 1rem;
-    color: var(--discret);
-    font-size: .9rem;
-}
-
-.ligne.alerte .absences {
-    color: var(--alerte);
-    font-weight: 600;
-}
-
-.btn-absent {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    min-height: 44px;
-    padding: 0 1rem;
-    border: 1px solid var(--principal);
-    background: #fff;
-    color: var(--principal);
-    border-radius: 6px;
-    font: inherit;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.btn-absent:hover {
-    background: var(--principal);
-    color: #fff;
-}
-
-.btn-absent:focus-visible {
-    outline: 3px solid #f0b429;
-    outline-offset: 2px;
 }
 
 .filtres {
@@ -144,35 +87,132 @@ main {
 
 .champ select,
 .champ input {
-    min-height: 44px;
+    width: 100%;
+    min-height: var(--tactile);
     padding: 0 .75rem;
     border: 1px solid var(--bordure);
     border-radius: 6px;
     background: var(--carte);
     color: var(--texte);
     font: inherit;
-    width: 100%;
+    font-size: 1rem;
 }
 
+.liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: .5rem;
+}
+
+.ligne {
+    display: grid;
+    gap: .5rem;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    padding: .75rem;
+}
+
+.nom {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.infos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    color: var(--discret);
+    font-size: .9rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.actions button {
+    flex: 1 1 auto;
+    min-height: var(--tactile);
+    padding: .5rem 1rem;
+    border: 1px solid var(--principal);
+    border-radius: 6px;
+    background: var(--carte);
+    color: var(--principal);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.actions button:focus-visible,
 .champ select:focus-visible,
 .champ input:focus-visible {
-    outline: 3px solid #f0b429;
+    outline: 3px solid var(--focus);
     outline-offset: 2px;
-    border-color: var(--principal);
+}
+
+.ligne.alerte {
+    border-color: var(--alerte);
+    background: var(--alerte-fond);
+}
+
+.ligne.alerte .absences {
+    color: var(--alerte);
+    font-weight: 600;
+}
+
+.badge-alerte {
+    justify-self: start;
+    padding: .375rem .625rem;
+    border-radius: 6px;
+    background: var(--badge-fond);
+    color: var(--badge-texte);
+    font-size: .8rem;
+    font-weight: 700;
 }
 
 .vide {
+    margin: 0;
+    padding: 1.5rem 1rem;
     text-align: center;
     color: var(--discret);
     background: var(--carte);
     border: 1px dashed var(--bordure);
-    border-radius: 8px;
-    padding: 1.5rem 1rem;
-    margin: 0;
+    border-radius: var(--rayon);
+}
+
+@media (hover: hover) {
+    .actions button:hover {
+        background: var(--principal);
+        color: var(--sur-principal);
+    }
 }
 
 @media (min-width: 600px) {
     .filtres {
         grid-template-columns: 1fr 1fr;
+    }
+    .ligne {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+    .actions {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+    }
+    .actions button {
+        flex: 0 0 auto;
+    }
+}
+
+@media (min-width: 900px) {
+    main {
+        max-width: 960px;
+    }
+    .filtres {
+        grid-template-columns: repeat(3, 1fr);
     }
 }

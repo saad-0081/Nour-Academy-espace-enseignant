@@ -34,8 +34,8 @@
                 <label for="tri">Trier par</label>
                 <select id="tri">
                     <option value="nom">Nom</option>
-                    <option value="moyenne">Moyenne </option>
-                    <option value="absences">Absences </option>
+                    <option value="moyenne">Moyenne</option>
+                    <option value="absences">Absences</option>
                 </select>
             </div>
         </section>
@@ -43,8 +43,69 @@
             Aucun élève ne correspond à votre recherche.
         </p>
         <ul id="liste" class="liste" aria-label="Liste des élèves"></ul>
+        <section class="ajout" aria-labelledby="titre-ajout">
+            <h2 id="titre-ajout">Ajouter un élève</h2>
+            <form id="form-eleve" class="formulaire" novalidate>
+                <fieldset>
+                    <legend>L'élève</legend>
+                    <div class="champ">
+                        <label for="prenom">Prénom</label>
+                        <input type="text" id="prenom" name="prenom"
+                            autocomplete="given-name"
+                            aria-describedby="message-prenom" required>
+                        <p id="message-prenom" class="message"></p>
+                    </div>
+                    <div class="champ">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" name="nom"
+                            autocomplete="family-name"
+                            aria-describedby="message-nom" required>
+                        <p id="message-nom" class="message"></p>
+                    </div>
+                    <div class="champ">
+                        <label for="groupe-eleve">Groupe</label>
+                        <select id="groupe-eleve" name="groupe"
+                            aria-describedby="message-groupe-eleve" required>
+                            <option value="">Choisir un groupe</option>
+                        </select>
+                        <p id="message-groupe-eleve" class="message"></p>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Le parent</legend>
+                    <div class="champ">
+                        <label for="email-parent">Email du parent</label>
+                        <input type="email" id="email-parent" name="email"
+                            autocomplete="email"
+                            placeholder="parent@gmail.com"
+                            aria-describedby="message-email-parent" required>
+                        <p id="message-email-parent" class="message"></p>
+                    </div>
+                    <div class="champ">
+                        <label for="telephone-parent">Téléphone du parent</label>
+                        <input type="tel" id="telephone-parent" name="telephone"
+                            autocomplete="tel"
+                            placeholder="06 12 34 56 78"
+                            aria-describedby="message-telephone-parent" required>
+                        <p id="message-telephone-parent" class="message"></p>
+                    </div>
+                    <div class="champ">
+                        <label for="code-acces">Code d'accès provisoire (espace parent)</label>
+                        <p id="aide-code" class="aide">
+                            8 caractères minimum, dont une majuscule,
+                            un chiffre et un caractère spécial.
+                        </p>
+                        <input type="password" id="code-acces" name="code"
+                            autocomplete="new-password"
+                            aria-describedby="aide-code message-code-acces" required>
+                        <p id="message-code-acces" class="message"></p>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn-principal">Ajouter l'élève</button>
+                <p id="message-form" class="message-form" aria-live="polite"></p>
+            </form>
+        </section>
     </main>
-
     <script src="data.js"></script>
     <script src="script.js"></script>
 </body>

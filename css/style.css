@@ -11,6 +11,9 @@
     --badge-fond: #fee2e2;
     --badge-texte: #b91c1c;
     --focus: #f0b429;
+    --succes: #1a7f37;
+    --erreur: #b42318;
+    --erreur-fond: #fdecea;
     --rayon: 8px;
     --tactile: 44px;
 }
@@ -214,5 +217,121 @@ main {
     }
     .filtres {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.ajout {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+.ajout h2 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+}
+
+.formulaire {
+    display: grid;
+    gap: 1rem;
+}
+
+.formulaire fieldset {
+    display: grid;
+    gap: .75rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.formulaire legend {
+    margin-bottom: .5rem;
+    padding: 0;
+    font-weight: 700;
+    color: var(--principal);
+}
+
+.aide {
+    margin: 0;
+    font-size: .85rem;
+    color: var(--discret);
+}
+
+.message {
+    min-height: 1.2em;
+    margin: 0;
+    font-size: .85rem;
+}
+
+.message.succes {
+    color: var(--succes);
+}
+
+.message.erreur {
+    color: var(--erreur);
+    font-weight: 600;
+}
+
+.champ .valide {
+    border: 2px solid var(--succes);
+}
+
+.champ .invalide {
+    border: 2px solid var(--erreur);
+}
+
+.btn-principal {
+    width: 100%;
+    min-height: var(--tactile);
+    padding: .5rem 1rem;
+    border: 0;
+    border-radius: 6px;
+    background: var(--principal);
+    color: var(--sur-principal);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-principal:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.message-form {
+    margin: 0;
+    padding: .75rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.message-form:empty {
+    display: none;
+}
+
+.message-form.succes {
+    color: var(--succes);
+    background: #e8f5ec;
+}
+
+.message-form.erreur {
+    color: var(--erreur);
+    background: var(--erreur-fond);
+}
+
+@media (min-width: 900px) {
+    .formulaire {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 2rem;
+    }
+    .btn-principal,
+    .message-form {
+        grid-column: 1 / -1;
+    }
+    .btn-principal {
+        justify-self: start;
+        width: auto;
     }
 }

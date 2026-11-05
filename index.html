@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -37,6 +38,30 @@
                     <option value="moyenne">Moyenne</option>
                     <option value="absences">Absences</option>
                 </select>
+            </div>
+        </section>
+        <section class="bilan">
+            <h2>Bilan du groupe</h2>
+            <div class="statistiques">
+                <div class="statistique">
+                    <h3>Moyenne du groupe</h3>
+                    <p id="moyenne-groupe">—</p>
+                </div>
+                <div class="statistique">
+                    <h3>Total des absences</h3>
+                    <p id="total-absences">0</p>
+                </div>
+                <div class="statistique">
+                    <h3>Élèves en alerte</h3>
+                    <p id="nombre-alertes">0</p>
+                </div>
+            </div>
+            <div class="parents">
+                <h3>Parents à appeler</h3>
+                <p id="aucune-alerte" hidden>
+                    Aucun élève en alerte.
+                </p>
+                <ul id="liste-parents"></ul>
             </div>
         </section>
         <p id="vide" class="vide" hidden>
@@ -85,12 +110,12 @@
                         <label for="telephone-parent">Téléphone du parent</label>
                         <input type="tel" id="telephone-parent" name="telephone"
                             autocomplete="tel"
-                            placeholder="06 12 34 56 78"
+                            placeholder=""
                             aria-describedby="message-telephone-parent" required>
                         <p id="message-telephone-parent" class="message"></p>
                     </div>
                     <div class="champ">
-                        <label for="code-acces">Code d'accès provisoire (espace parent)</label>
+                        <label for="code-acces">Code d'accès provisoire </label>
                         <p id="aide-code" class="aide">
                             8 caractères minimum, dont une majuscule,
                             un chiffre et un caractère spécial.
@@ -101,12 +126,15 @@
                         <p id="message-code-acces" class="message"></p>
                     </div>
                 </fieldset>
-                <button type="submit" class="btn-principal">Ajouter l'élève</button>
+                <button type="submit" class="btn-principal">
+                    Ajouter l'élève
+                </button>
                 <p id="message-form" class="message-form" aria-live="polite"></p>
             </form>
         </section>
     </main>
     <script src="data.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>

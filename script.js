@@ -366,7 +366,7 @@ formulaire.addEventListener("submit", function(event) {
         prenom.classList.add("invalide");
         prenom.focus();
 
-        return;
+        return
     }
 
     const nombreEleves = eleves.filter(function(eleve) {

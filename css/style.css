@@ -335,3 +335,61 @@ main {
         width: auto;
     }
 }
+
+.bilan {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--carte);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+.bilan h2 {
+    margin-top: 0;
+}
+
+.statistiques {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.statistique {
+    padding: 1rem;
+    background: var(--fond);
+    border-radius: var(--rayon);
+}
+
+.statistique h3 {
+    margin: 0;
+    font-size: .9rem;
+    color: var(--discret);
+}
+
+.statistique p {
+    margin-bottom: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--principal);
+}
+
+.parents {
+    margin-top: 1.5rem;
+}
+
+.parents h3 {
+    font-size: 1rem;
+}
+
+#liste-parents {
+    padding-left: 1.2rem;
+}
+
+#liste-parents li {
+    margin-bottom: .5rem;
+}
+
+#aucune-alerte {
+    color: var(--succes);
+    font-weight: 600;
+}

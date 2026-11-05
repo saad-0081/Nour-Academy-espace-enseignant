@@ -5,14 +5,29 @@ const selectGroupe = document.querySelector("#groupe");
 const recherche = document.querySelector("#recherche");
 const vide = document.querySelector("#vide");
 
+const formulaire = document.querySelector("#form-eleve");
+const prenom = document.querySelector("#prenom");
+const nom = document.querySelector("#nom");
+const groupeEleve = document.querySelector("#groupe-eleve");
+const emailParent = document.querySelector("#email-parent");
+const telephoneParent = document.querySelector("#telephone-parent");
+const codeAcces = document.querySelector("#code-acces");
+const messageForm = document.querySelector("#message-form");
+
+const moyenneGroupe = document.querySelector("#moyenne-groupe");
+const totalAbsences = document.querySelector("#total-absences");
+const nombreAlertes = document.querySelector("#nombre-alertes");
+const listeParents = document.querySelector("#liste-parents");
+const aucuneAlerte = document.querySelector("#aucune-alerte");
+
 function calculerMoyenne(notes) {
     if (notes.length === 0) {
         return "—";
     }
 
-    const somme = notes.reduce(
-        (total, note) => total + note, 0
-    );
+    const somme = notes.reduce(function(total, note) {
+        return total + note;
+    }, 0);
 
     const moyenne = somme / notes.length;
 
@@ -24,9 +39,9 @@ function moyenneNombre(notes) {
         return -1;
     }
 
-    const somme = notes.reduce(
-        (total, note) => total + note, 0
-    );
+    const somme = notes.reduce(function(total, note) {
+        return total + note;
+    }, 0);
 
     return somme / notes.length;
 }
@@ -48,10 +63,8 @@ function majAlerte(li, eleve) {
 
         if (!li.querySelector(".badge-alerte")) {
             const badge = document.createElement("span");
-
             badge.classList.add("badge-alerte");
             badge.textContent = "Prévenir les parents";
-
             li.append(badge);
         }
     }
@@ -62,9 +75,9 @@ function creerLigne(eleve) {
     li.classList.add("ligne");
     li.dataset.id = eleve.id;
 
-    const nom = document.createElement("span");
-    nom.classList.add("nom");
-    nom.textContent = eleve.prenom + " " + eleve.nom;
+    const nomEleve = document.createElement("span");
+    nomEleve.classList.add("nom");
+    nomEleve.textContent = eleve.prenom + " " + eleve.nom;
 
     const infos = document.createElement("div");
     infos.classList.add("infos");
@@ -93,8 +106,7 @@ function creerLigne(eleve) {
     boutonNote.dataset.action = "note";
 
     actions.append(boutonAbsent, boutonNote);
-
-    li.append(nom, infos, actions);
+    li.append(nomEleve, infos, actions);
 
     majAlerte(li, eleve);
 
@@ -103,7 +115,6 @@ function creerLigne(eleve) {
 
 function creerOption(groupe) {
     const option = document.createElement("option");
-
     option.value = groupe.id;
     option.textContent = groupe.nom + " — " + groupe.cours;
 
@@ -111,15 +122,72 @@ function creerOption(groupe) {
 }
 
 const optionTous = document.createElement("option");
-
 optionTous.value = "";
 optionTous.textContent = "Tous les groupes";
-
 selectGroupe.append(optionTous);
 
 groupes.forEach(function(groupe) {
     selectGroupe.append(creerOption(groupe));
+    groupeEleve.append(creerOption(groupe));
 });
+
+function actualiserBilan() {
+    const groupeChoisi = selectGroupe.value;
+
+    const elevesGroupe = eleves.filter(function(eleve) {
+        return groupeChoisi === "" ||
+            eleve.groupeId === Number(groupeChoisi);
+    });
+
+    const bilanNotes = elevesGroupe.reduce(function(acc, eleve) {
+        const somme = eleve.notes.reduce(function(total, note) {
+            return total + note;
+        }, 0);
+
+        acc.somme += somme;
+        acc.nombre += eleve.notes.length;
+
+        return acc;
+    }, { somme: 0, nombre: 0 });
+
+    const moyenne = bilanNotes.nombre === 0 ?
+        "—" :
+        (bilanNotes.somme / bilanNotes.nombre)
+        .toFixed(1).replace(".", ",") + " / 20";
+
+    moyenneGroupe.textContent = moyenne;
+
+    const absences = elevesGroupe.reduce(function(total, eleve) {
+        return total + eleve.absences;
+    }, 0);
+
+    totalAbsences.textContent = absences;
+
+    const alertes = elevesGroupe.filter(function(eleve) {
+        return eleve.absences >= 3;
+    });
+
+    nombreAlertes.textContent = alertes.length;
+
+    const parents = alertes.map(function(eleve) {
+        return eleve.prenom + " " + eleve.nom +
+            " — " + eleve.telephoneParent;
+    });
+
+    listeParents.replaceChildren();
+
+    parents.forEach(function(parent) {
+        const li = document.createElement("li");
+        li.textContent = parent;
+        listeParents.append(li);
+    });
+
+    const aucunEleve = elevesGroupe.every(function(eleve) {
+        return eleve.absences < 3;
+    });
+
+    aucuneAlerte.hidden = !aucunEleve;
+}
 
 function afficher() {
     const groupeChoisi = selectGroupe.value;
@@ -160,10 +228,13 @@ function afficher() {
 
     liste.replaceChildren();
     liste.append(...resultats.map(creerLigne));
+
     compteur.textContent = resultats.length +
-        (resultats.length > 1 ? " élèves" : " élève");
+        (resultats.length > 1 ? " eleves" : " eleve");
 
     vide.hidden = resultats.length > 0;
+
+    actualiserBilan();
 }
 
 liste.addEventListener("click", function(event) {
@@ -190,10 +261,12 @@ liste.addEventListener("click", function(event) {
             texteAbsences(eleve.absences);
 
         majAlerte(li, eleve);
+
+        actualiserBilan();
     }
 
     if (bouton.dataset.action === "note") {
-        const saisie = prompt("Entrer une note entre 0 et 20 :");
+        const saisie = prompt("Entrer une note :");
 
         if (saisie === null) return;
 
@@ -213,6 +286,8 @@ liste.addEventListener("click", function(event) {
 
         li.querySelector(".moyenne").textContent =
             calculerMoyenne(eleve.notes);
+
+        actualiserBilan();
     }
 });
 
@@ -220,29 +295,12 @@ selectGroupe.addEventListener("change", afficher);
 recherche.addEventListener("input", afficher);
 tri.addEventListener("change", afficher);
 
-afficher();
-const formulaire = document.querySelector("#form-eleve");
-
-const prenom = document.querySelector("#prenom");
-const nom = document.querySelector("#nom");
-const groupeEleve = document.querySelector("#groupe-eleve");
-const emailParent = document.querySelector("#email-parent");
-const telephoneParent = document.querySelector("#telephone-parent");
-const codeAcces = document.querySelector("#code-acces");
-
-const messageForm = document.querySelector("#message-form");
-
-groupes.forEach(function(groupe) {
-    groupeEleve.append(creerOption(groupe));
-});
-
 const regexNom = /^[\p{L}]+(?:[ -][\p{L}]+)*$/u;
-const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{3,}$/;
+const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const regexTelephone = /^(?:(?:06|07|05)\d{8}|\+212[567]\d{8})$/;
 const regexCode = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 
 function verifierChamp(champ) {
-
     const valeur = champ.value.trim();
 
     let valide = false;
@@ -264,24 +322,29 @@ function verifierChamp(champ) {
             "Minimum 2 lettres, sans chiffres.";
     } else if (champ === groupeEleve) {
         valide = valeur !== "";
+
         message = valide ?
             "Groupe sélectionné." :
             "Veuillez choisir un groupe.";
     } else if (champ === emailParent) {
         valide = regexEmail.test(valeur);
+
         message = valide ?
             "Email valide." :
             "Veuillez saisir un email valide.";
     } else if (champ === telephoneParent) {
-        valide = regexTelephone.test(valeur);
+        const telephone = valeur.replace(/[\s.-]/g, "");
+        valide = regexTelephone.test(telephone);
+
         message = valide ?
             "Téléphone valide." :
             "Numéro marocain invalide.";
     } else if (champ === codeAcces) {
         valide = regexCode.test(valeur);
+
         message = valide ?
             "Code valide." :
-            "8 caractères minimum, une majuscule, un chiffre et un caractère spécial.";
+            "8 caractères minimum, une majuscule, un chiffre et un caractere special.";
     }
 
     const messageChamp = document.querySelector(
@@ -308,7 +371,6 @@ const champs = [
 ];
 
 champs.forEach(function(champ) {
-
     champ.addEventListener("input", function() {
         verifierChamp(champ);
     });
@@ -316,11 +378,9 @@ champs.forEach(function(champ) {
     champ.addEventListener("change", function() {
         verifierChamp(champ);
     });
-
 });
 
 formulaire.addEventListener("submit", function(event) {
-
     event.preventDefault();
 
     messageForm.textContent = "";
@@ -335,7 +395,6 @@ formulaire.addEventListener("submit", function(event) {
     });
 
     if (!tousValides) {
-
         const premierInvalide = champs.find(function(champ) {
             return !verifierChamp(champ);
         });
@@ -347,26 +406,23 @@ formulaire.addEventListener("submit", function(event) {
     const groupeId = Number(groupeEleve.value);
 
     const existeDeja = eleves.some(function(eleve) {
-
         return (
             eleve.groupeId === groupeId &&
             normaliser(eleve.prenom) === normaliser(prenom.value.trim()) &&
             normaliser(eleve.nom) === normaliser(nom.value.trim())
         );
-
     });
 
     if (existeDeja) {
-
         const message = document.querySelector("#message-prenom");
 
-        message.textContent = "Cet eleve existe deja .";
+        message.textContent = "Cet élève existe déjà.";
         message.className = "message erreur";
 
         prenom.classList.add("invalide");
         prenom.focus();
 
-        return
+        return;
     }
 
     const nombreEleves = eleves.filter(function(eleve) {
@@ -374,10 +430,9 @@ formulaire.addEventListener("submit", function(event) {
     }).length;
 
     if (nombreEleves >= 15) {
-
         const message = document.querySelector("#message-groupe-eleve");
 
-        message.textContent = "Ce groupe contient deja 15 eleve.";
+        message.textContent = "Ce groupe contient deja 15 eleve .";
         message.className = "message erreur";
 
         groupeEleve.classList.add("invalide");
@@ -387,30 +442,25 @@ formulaire.addEventListener("submit", function(event) {
     }
 
     const nouvelEleve = {
-
-        id: Math.max(...eleves.map(function(eleve) {
+        id: Math.max(0, ...eleves.map(function(eleve) {
             return eleve.id;
         })) + 1,
-
         prenom: prenom.value.trim(),
         nom: nom.value.trim(),
         groupeId: groupeId,
         emailParent: emailParent.value.trim(),
-        telephoneParent: telephoneParent.value.trim(),
+        telephoneParent: telephoneParent.value.trim().replace(/[\s.-]/g, ""),
         absences: 0,
         notes: []
-
     };
 
     eleves.push(nouvelEleve);
 
     selectGroupe.value = String(groupeId);
-    afficher();
 
     formulaire.reset();
 
     champs.forEach(function(champ) {
-
         champ.classList.remove("valide", "invalide");
 
         const message = document.querySelector(
@@ -419,10 +469,12 @@ formulaire.addEventListener("submit", function(event) {
 
         message.textContent = "";
         message.className = "message";
-
     });
 
-    messageForm.textContent = "eleve est ajouter ";
+    messageForm.textContent = "eleve ajouter avec succes.";
     messageForm.classList.add("succes");
 
+    afficher();
 });
+
+afficher();
